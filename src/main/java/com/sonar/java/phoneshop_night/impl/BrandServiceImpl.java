@@ -1,10 +1,15 @@
 package com.sonar.java.phoneshop_night.impl;
 
 import com.sonar.java.phoneshop_night.entity.Brand;
+import com.sonar.java.phoneshop_night.exception.ApiException;
 import com.sonar.java.phoneshop_night.repository.BrandRepository;
 import com.sonar.java.phoneshop_night.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.Optional;
 
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -15,4 +20,13 @@ public class BrandServiceImpl implements BrandService {
     public Brand create(Brand brand) {
         return brandRepository.save(brand);
     }
+
+    @Override
+    public Brand getById(Integer id) {
+
+        return brandRepository.findById(id).orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND,"Brand with id = %d Not Found".formatted(id)));
+
+    }
+
+
 }
